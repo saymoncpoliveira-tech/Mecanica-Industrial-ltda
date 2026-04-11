@@ -375,4 +375,19 @@ SELECT * FROM ticketmedio;
 INSERT INTO tb_produto (tipo, preco, tb_estoque_num_estoque)
  VALUES ('Luva de Proteção Anticorte', 32.50, 2);
 
+ #THIAGO
+-- IMPLEMENTAÇÃO DE TRIGGERS PARA ATUALIZAÇÃO AUTOMÁTICA DE VENDAS
+  
+DELIMITER //
+
+CREATE TRIGGER tgr_updvendas
+AFTER INSERT ON tb_pedido -- O gatilho dispara após inserir dados na tabela tb_pedido
+FOR EACH ROW
+BEGIN
+	UPDATE tb_estoque
+	SET qt_atual = qt_atual - NEW.quantidade -- NEW refere-se aos dados que acabaram de ser inseridos
+    WHERE num_estoque = NEW.num_estoque;
+END;
+
+DELIMITER //
 
