@@ -1,26 +1,8 @@
--- MECÂNICA INDUSTRIAL LTDA - ATIVIDADE
-
--- NOME DOS INTEGRANTES DO GRUPO:
--- Saymon Carvalho Pereira de Oliveira
--- Marcus Vinicius Leite dos Santos
--- Thiago Bastos Pereira
-
--- QUERIES QUE SERÃO ADICIONADAS
-
--- JOIN (INNER, LEFT ou RIGHT)
--- Funções de agregação (COUNT, SUM, AVG)
--- Subconsultas
-
-
-/* 
-_______________________________
-      ATIVIDADE 14-03
-_______________________________
-*/
--- CRIAÇÃO DO BANCO (DDL)
-
+-- CRIAÇÃO DO BANCO DE DADOS
 CREATE DATABASE mec_industrial;
 USE mec_industrial;
+
+-- ||CRIAÇÃO DAS TABELAS||
 
 -- TABELA CLIENTE
 CREATE TABLE tb_cliente(
@@ -99,19 +81,20 @@ END $$
 
 DELIMITER ;
 
+
 DELIMITER $$
+
 
 CREATE PROCEDURE sp_inserir_funcionario
 (
-	IN p_num_registro INT,
 	IN p_nome VARCHAR(45),
     IN p_funcao VARCHAR(45),
     IN p_salario FLOAT,
     IN p_tmp_serviço INT(2)
 )
 BEGIN
-    INSERT INTO tb_funcionario (num_registro, nome, funcao, salario, tmp_serviço)
-    VALUES (p_num_registro, p_nome, p_funcao, p_salario, p_tmp_serviço);
+    INSERT INTO tb_funcionario (nome, funcao, salario, tmp_serviço)
+    VALUES (p_nome, p_funcao, p_salario, p_tmp_serviço);
 	END $$
 
 DELIMITER ;
@@ -151,7 +134,7 @@ CALL sp_inserir_cliente (123456789, 'Flavinho do Grau', 44000111);
 
 -- INSERINDO DADOS NA TABELA FUNCIONÁRIO (tb_funcionario) | COM O PROCEDURE
 
-CALL sp_inserir_produto ('Fernando Silva', 'vendedor', 3200.00, 5);
+CALL sp_inserir_funcionario ('Roberto Carlos', 'vendedor', 3200.00, 5);
 
 -- INSERINDO DADOS NA TABELA PEDIDO (tb_pedido)
 -- Inserindo PEDIDO usando subconsultas para achar o CPF do cliente e o Registro do funcionário pelo nome
@@ -160,6 +143,7 @@ VALUES ('Em Andamento', 'Manutenção Preventiva', NOW(),
     (SELECT cpf FROM tb_cliente WHERE nome = 'Flavinho do Grau'), 
     (SELECT num_registro FROM tb_funcionario WHERE nome = 'Roberto Carlos')
 );
+
 
 -- INSERINDO DADOS NA TABELA ESTOQUE (tb_estoque)
 INSERT INTO tb_estoque (num_estoque, descricao, setor, qt_atual) VALUES (1, 'Ferragens', 1, 100);
@@ -378,7 +362,7 @@ INSERT INTO tb_produto (tipo, preco, tb_estoque_num_estoque)
  #THIAGO
 -- IMPLEMENTAÇÃO DE TRIGGERS PARA ATUALIZAÇÃO AUTOMÁTICA DE VENDAS
   
-DELIMITER //
+DELIMITER $$
 
 CREATE TRIGGER tgr_updvendas
 AFTER INSERT ON tb_pedido -- O gatilho dispara após inserir dados na tabela tb_pedido
@@ -389,5 +373,4 @@ BEGIN
     WHERE num_estoque = NEW.num_estoque;
 END;
 
-DELIMITER //
-
+DELIMITER ;
