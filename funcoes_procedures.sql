@@ -21,15 +21,14 @@ DELIMITER $$
 
 CREATE PROCEDURE sp_inserir_funcionario
 (
-	IN p_num_registro INT,
 	IN p_nome VARCHAR(45),
     IN p_funcao VARCHAR(45),
     IN p_salario FLOAT,
     IN p_tmp_serviço INT(2)
 )
 BEGIN
-    INSERT INTO tb_funcionario (num_registro, nome, funcao, salario, tmp_serviço)
-    VALUES (p_num_registro, p_nome, p_funcao, p_salario, p_tmp_serviço);
+    INSERT INTO tb_funcionario (nome, funcao, salario, tmp_serviço)
+    VALUES (p_nome, p_funcao, p_salario, p_tmp_serviço);
 	END $$
 
 DELIMITER ;
@@ -57,5 +56,5 @@ DELIMITER ;
 
 -- VENDO O DESCONTO DO FUNCIONÁRIO:
 
-CALL sp_aplicar_bonus_antiguidade(15465123, @resultado);
+CALL sp_aplicar_bonus_antiguidade(1, @resultado);
 SELECT @resultado AS salario_atualizado;
